@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Movie Catalogue (Local Storage)</string>
+    <!--navigation-->
+    <string name="title_movie">Movie</string>
+    <string name="title_tvShow">TV Show</string>
+    <string name="title_favorite">Favorite</string>
+    <!--//-->
+    <string name="change_language_settings">Ubah pengaturan bahasa</string>
+    <string name="Movies"> Film </string>
+    <string name="TvShows"> Acara TV </string>
+    <string name="judul_film" translatable="false">Judul Film</string>
+    <string name="_7_0" translatable="false">7.0</string>
+    <string name="poster">poster</string>
+    <string name="bintang">bintang</string>
+    <string name="overview">Ikhtisar</string>
+    <string name="detailfilm">Detail</string>
+    <string name="loding">Memuat.....</string>
+    <string name="deskripsi">Description</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>
