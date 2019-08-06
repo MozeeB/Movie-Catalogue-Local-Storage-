@@ -16,8 +16,8 @@ public interface TvShowDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void InsertTvShow(ResultsItemTvShow resultsItemTvShow);
 
-    @Delete
-    void deleteTvShow(ResultsItemTvShow resultsItemTvShow);
+    @Query("DELETE FROM tb_tvshow WHERE id = :id")
+    void deleteTvShow(long id);
 
     @Query("SELECT * FROM tb_tvshow ORDER BY name ASC")
     List<ResultsItemTvShow> getFavoriteTvShow();

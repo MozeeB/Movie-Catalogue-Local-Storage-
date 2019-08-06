@@ -7,14 +7,11 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.gson.annotations.SerializedName;
 
 @Entity(tableName = "tb_movie")
-public class ResultsItemMovie implements Parcelable {
-
+ public class ResultsItemMovie implements Parcelable {
+    
     @ColumnInfo(name = "overview")
     @SerializedName("overview")
     private String overview;
@@ -68,6 +65,7 @@ public class ResultsItemMovie implements Parcelable {
     @ColumnInfo(name = "vote_count")
     @SerializedName("vote_count")
     private int voteCount;
+
 
     public String getOverview() {
         return overview;

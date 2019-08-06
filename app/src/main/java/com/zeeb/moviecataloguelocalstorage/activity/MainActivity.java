@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.zeeb.moviecataloguelocalstorage.R;
@@ -29,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     FavoriteFragment favoriteFragment;
     @BindView(R.id.setLenguage)
     ImageView setLenguage;
+    @BindView(R.id.setReminder)
+    ImageView setReminder;
 
 
     @Override
@@ -101,10 +104,17 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-
-    @OnClick(R.id.setLenguage)
-    public void onViewClicked() {
-        Intent mIntent = new Intent(Settings.ACTION_LOCALE_SETTINGS);
-        startActivity(mIntent);
+    @OnClick({R.id.setLenguage, R.id.setReminder})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.setLenguage:
+                Intent mIntent = new Intent(Settings.ACTION_LOCALE_SETTINGS);
+                startActivity(mIntent);
+                break;
+            case R.id.setReminder:
+                Intent in = new Intent(this, ReminderActivity.class);
+                startActivity(in);
+                break;
+        }
     }
 }

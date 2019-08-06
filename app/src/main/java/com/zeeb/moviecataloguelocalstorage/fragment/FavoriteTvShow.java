@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,15 +17,17 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.zeeb.moviecataloguelocalstorage.R;
-import com.zeeb.moviecataloguelocalstorage.adapter.TvShowAdapter;
+import com.zeeb.moviecataloguelocalstorage.adapter.FavTvShowAdapater;
 import com.zeeb.moviecataloguelocalstorage.data.local.tvshow.TvShowDatabase;
 import com.zeeb.moviecataloguelocalstorage.data.remote.model.tvshow.ResultsItemTvShow;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import es.dmoral.toasty.Toasty;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,9 +41,9 @@ public class FavoriteTvShow extends Fragment {
     Unbinder unbinder;
     private FragmentManager fragmentManager;
 
-    ArrayList<ResultsItemTvShow> resultsItemMovieArrayList = new ArrayList<>();
+    List<ResultsItemTvShow> resultsItemMovieArrayList = new ArrayList<>();
     TvShowDatabase tvShowDatabase;
-    TvShowAdapter adapter;
+    FavTvShowAdapater adapter;
 
     public void setFragmentManager(FragmentManager fragmentManager) {
         this.fragmentManager = fragmentManager;
@@ -75,21 +78,43 @@ public class FavoriteTvShow extends Fragment {
         tvShowDatabase = TvShowDatabase.getTvShowDatabase(getActivity());
         getFavorite();
         setupRecyclerView();
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder viewHolder1) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+                removeFav((long) viewHolder.itemView.getTag());
+                resultsItemMovieArrayList.remove(resultsItemMovieArrayList.get(viewHolder.getAdapterPosition()));
+                adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+
+            }
+        }).attachToRecyclerView(rvFavTvShow);
+    }
+
+    private void removeFav(long tag) {
+        tvShowDatabase = TvShowDatabase.getTvShowDatabase(getActivity());
+        tvShowDatabase.tvShowDao().deleteTvShow(tag);
+        Toasty.success(getActivity(), R.string.successDel, Toast.LENGTH_SHORT).show();
     }
 
     public void getFavorite() {
-        if (tvShowDatabase.tvShowDao().getFavoriteTvShow() != null) {
-            tvShowDatabase.tvShowDao().getFavoriteTvShow();
+        if (tvShowDatabase.tvShowDao().getFavoriteTvShow() == null) {
+            Toast.makeText(getActivity(), R.string.noFavData, Toast.LENGTH_SHORT).show();
             showLoading(false);
         } else {
-            Toast.makeText(getActivity(), "No favorite data here!", Toast.LENGTH_SHORT).show();
+            tvShowDatabase.tvShowDao().getFavoriteTvShow();
             showLoading(false);
         }
     }
 
     private void setupRecyclerView() {
+        resultsItemMovieArrayList = tvShowDatabase.tvShowDao().getFavoriteTvShow();
         if (adapter == null) {
-            adapter = new TvShowAdapter(getActivity(), resultsItemMovieArrayList);
+            adapter = new FavTvShowAdapater(getActivity(), resultsItemMovieArrayList);
             rvFavTvShow.setLayoutManager(new LinearLayoutManager(getActivity()));
             rvFavTvShow.setAdapter(adapter);
             rvFavTvShow.setItemAnimator(new DefaultItemAnimator());
@@ -106,6 +131,7 @@ public class FavoriteTvShow extends Fragment {
             progressBarFavTvShow.setVisibility(View.GONE);
         }
     }
+
 
     @Override
     public void onDestroyView() {

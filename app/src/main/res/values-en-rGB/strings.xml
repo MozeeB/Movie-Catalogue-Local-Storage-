@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Movie Catalogue (Local Storage)</string>
+    <!--navigation-->
+    <string name="title_movie">Movie</string>
+    <string name="title_tvShow">TV Show</string>
+    <string name="title_favorite">Favorite</string>
+    <!--//-->
+    <string name="change_language_settings">Change language settings</string>
+    <string name="Movies"> Movie </string>
+    <string name="TvShows"> TV Show </string>
+    <string name="judul_film" translatable="false">Judul Film</string>
+    <string name="_7_0" translatable="false">7.0</string>
+    <string name="poster">Poster</string>
+    <string name="bintang">Star</string>
+    <string name="overview">Overview</string>
+    <string name="detailfilm">Details</string>
+    <string name="loding">Loading.....</string>
+    <string name="deskripsi">Description</string>
+
+    <string name="addFav">Add to favorite!</string>
+    <string name="questionFav">Do you want to delete from the list of favorites?</string>
+    <string name="ya">Yes</string>
+    <string name="successDel">Successfully deleted!</string>
+    <string name="tidak">No</string>
+    <string name="noFavData">No favorite data here!</string>
+    <string name="nodatafound">No data found!</string>
+    <string name="presslong">Long press to delete or swipe left or right to delete</string>
+    <string name="appwidget_text">Favorite Movie</string>
+    <string name="add_widget">Add widget</string>
+    <string name="no_favorite">No Favorite</string>
+
+    <!--//-->
+    <string name="action_notification">Notifications</string>
+    <string name="key_reminder_daily">key_daily_reminder</string>
+    <string name="label_daily_reminder_summary">Turn on/off daily reminder</string>
+    <string name="label_daily_reminder_title">Daily Reminder</string>
+    <string name="label_upcoming_reminder_title">Upcoming Reminder</string>
+    <string name="key_reminder_upcoming">key_upcoming_reminder</string>
+    <string name="label_upcoming_reminder_summary">Turn on/off upcoming reminder</string>
+    <string name="key_setting_locale">key_setting_locale</string>
+    <string name="label_setting_locale_summary">Setting Locale</string>
+    <string name="label_setting_locale_title">Change your phone localization</string>
+    <string name="msg_daily_reminder">Hi, movie apps are waiting for you!</string>
+    <string name="upcoming_reminder_msg" >Hi, today %s is release  </string>
+
+</resources>

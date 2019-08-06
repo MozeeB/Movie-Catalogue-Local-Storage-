@@ -17,7 +17,17 @@
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
             android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme" />
+            app:titleTextColor="@color/white"
+            android:theme="?attr/actionBarTheme" >
+
+            <TextView
+                android:id="@+id/judldetailtol"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                tools:text="@string/judul_film"/>
+        </android.support.v7.widget.Toolbar>
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -34,6 +44,7 @@
                 android:scaleType="centerCrop"
                 android:contentDescription="@string/poster"
                 tools:srcCompat="@tools:sample/backgrounds/scenic[1]" />
+
 
             <TextView
                 android:id="@+id/tvJudulDetailTvShow"

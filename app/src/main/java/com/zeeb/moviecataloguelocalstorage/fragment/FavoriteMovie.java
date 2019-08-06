@@ -1,7 +1,6 @@
 package com.zeeb.moviecataloguelocalstorage.fragment;
 
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,7 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,15 +17,18 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.zeeb.moviecataloguelocalstorage.R;
+import com.zeeb.moviecataloguelocalstorage.adapter.FavMovieAdapter;
 import com.zeeb.moviecataloguelocalstorage.adapter.MovieAdapter;
 import com.zeeb.moviecataloguelocalstorage.data.local.movie.MovieDatabase;
 import com.zeeb.moviecataloguelocalstorage.data.remote.model.movie.ResultsItemMovie;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import es.dmoral.toasty.Toasty;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,10 +46,9 @@ public class FavoriteMovie extends Fragment {
 //    public static final String KEY_MOVIES = "movies";
 
     private MovieDatabase movieDatabase;
-    private MovieAdapter movieAdapter;
+    private FavMovieAdapter movieAdapter;
 
-    ArrayList<ResultsItemMovie> resultsItemMovieArrayList = new ArrayList<>();
-
+    List<ResultsItemMovie> resultsItemMovies = new ArrayList<>();
 
 
     public void setFragmentManager(FragmentManager fragmentManager) {
@@ -78,26 +79,46 @@ public class FavoriteMovie extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        movieDatabase = MovieDatabase.getMovieDatabase(getActivity());
         showLoading(true);
         getFavorite();
         setupRecyclerView();
 
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder viewHolder1) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+                removeFav((long) viewHolder.itemView.getTag());
+                resultsItemMovies.remove(resultsItemMovies.get(viewHolder.getAdapterPosition()));
+                movieAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+            }
+        }).attachToRecyclerView(rvFavMovie);
+    }
+
+    private void removeFav(long tag) {
+        movieDatabase = MovieDatabase.getMovieDatabase(getActivity());
+        movieDatabase.movieDao().deleteMovie(tag);
+        Toasty.success(getActivity(), R.string.successDel, Toast.LENGTH_SHORT).show();
     }
 
     public void getFavorite() {
-        if (movieDatabase.movieDao().getFavoriteMovie() != null) {
-            movieDatabase.movieDao().getFavoriteMovie();
+        movieDatabase = MovieDatabase.getMovieDatabase(getActivity());
+        if (movieDatabase.movieDao().getFavoriteMovie() == null) {
+            Toast.makeText(getActivity(), getString(R.string.noFavData), Toast.LENGTH_SHORT).show();
             showLoading(false);
         } else {
-            Toast.makeText(getActivity(), "No favorite data here!", Toast.LENGTH_SHORT).show();
+            movieDatabase.movieDao().getFavoriteMovie();
             showLoading(false);
         }
     }
 
     private void setupRecyclerView() {
+        resultsItemMovies = movieDatabase.movieDao().getFavoriteNoCursor();
         if (movieAdapter == null) {
-            movieAdapter = new MovieAdapter(getActivity(), resultsItemMovieArrayList);
+            movieAdapter = new FavMovieAdapter(getActivity(), resultsItemMovies);
             rvFavMovie.setLayoutManager(new LinearLayoutManager(getActivity()));
             rvFavMovie.setAdapter(movieAdapter);
             rvFavMovie.setItemAnimator(new DefaultItemAnimator());
@@ -120,4 +141,5 @@ public class FavoriteMovie extends Fragment {
         super.onDestroyView();
         unbinder.unbind();
     }
+
 }

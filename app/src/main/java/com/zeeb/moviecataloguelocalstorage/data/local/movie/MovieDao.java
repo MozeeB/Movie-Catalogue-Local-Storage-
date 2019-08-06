@@ -1,10 +1,10 @@
 package com.zeeb.moviecataloguelocalstorage.data.local.movie;
 
 import android.arch.persistence.room.Dao;
-import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
+import android.database.Cursor;
 
 import com.zeeb.moviecataloguelocalstorage.data.remote.model.movie.ResultsItemMovie;
 
@@ -14,15 +14,18 @@ import java.util.List;
 public interface MovieDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    long insertMovie(ResultsItemMovie resultsItemMovie);
+    void insertMovie( ResultsItemMovie itemMovie);
 
-    @Delete
-    void deleteMovie(ResultsItemMovie resultsItemMovie);
+    @Query("DELETE FROM tb_movie WHERE id = :id")
+    void deleteMovie(long id);
 
     @Query("SELECT * FROM tb_movie WHERE id = :id")
-    ResultsItemMovie selectItem(String id);
+    Cursor selectItem(long id);
 
     @Query("SELECT * FROM tb_movie")
-    List<ResultsItemMovie> getFavoriteMovie();
+    Cursor getFavoriteMovie();
+
+    @Query("SELECT * FROM tb_movie")
+    List<ResultsItemMovie> getFavoriteNoCursor();
 
 }

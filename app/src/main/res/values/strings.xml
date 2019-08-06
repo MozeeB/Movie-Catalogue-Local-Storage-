@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">Movie Catalogue (Local Storage)</string>
+    <string name="app_name">Katalog Film (Penyimpanan Lokal)</string>
     <!--navigation-->
-    <string name="title_movie">Movie</string>
-    <string name="title_tvShow">TV Show</string>
-    <string name="title_favorite">Favorite</string>
+    <string name="title_movie">Film</string>
+    <string name="title_tvShow">Acara TV</string>
+    <string name="title_favorite">Favorit</string>
     <!--//-->
     <string name="change_language_settings">Ubah pengaturan bahasa</string>
     <string name="Movies"> Film </string>
@@ -15,9 +15,32 @@
     <string name="overview">Ikhtisar</string>
     <string name="detailfilm">Detail</string>
     <string name="loding">Memuat.....</string>
-    <string name="deskripsi">Description</string>
+    <string name="deskripsi">Deskripsi</string>
+    <string name="addFav">Di tambahkan ke favorite!</string>
+    <string name="questionFav">Apakah ingin menghapus dari daftar favorite?</string>
+    <string name="ya">Ya</string>
+    <string name="successDel">Berhasil menghapus!</string>
+    <string name="tidak">Tidak</string>
+    <string name="noFavData">Tidak ada favorit data disini!</string>
+    <string name="nodatafound">Tidak ada data yang ditemukan!</string>
+    <string name="presslong">Tekan lama untuk menghapus atau geser kiri atau kanan untuk menghapus</string>
+    <string name="appwidget_text">Film Favorit</string>
+    <string name="add_widget">Add widget</string>
+    <string name="no_favorite">No Favorite</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!--//-->
+    <string name="action_notification">Notifications</string>
+    <string name="key_reminder_daily">key_daily_reminder</string>
+    <string name="label_daily_reminder_summary">Turn on/off daily reminder</string>
+    <string name="label_daily_reminder_title">Daily Reminder</string>
+    <string name="label_upcoming_reminder_title">Upcoming Reminder</string>
+    <string name="key_reminder_upcoming">key_upcoming_reminder</string>
+    <string name="label_upcoming_reminder_summary">Turn on/off upcoming reminder</string>
+    <string name="key_setting_locale">key_setting_locale</string>
+    <string name="label_setting_locale_summary">Setting Locale</string>
+    <string name="label_setting_locale_title">Change your phone localization</string>
+    <string name="msg_daily_reminder">Hi, movie apps are waiting for you!</string>
+    <string name="upcoming_reminder_msg">Hi, today %s is release  </string>
+
 
 </resources>

@@ -1,8 +1,13 @@
 package com.zeeb.moviecataloguelocalstorage.repository;
 
+import android.app.Application;
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 
+import com.zeeb.moviecataloguelocalstorage.data.local.movie.MovieDao;
+import com.zeeb.moviecataloguelocalstorage.data.local.movie.MovieDatabase;
 import com.zeeb.moviecataloguelocalstorage.data.remote.model.movie.ResponseMovie;
+import com.zeeb.moviecataloguelocalstorage.data.remote.model.movie.ResultsItemMovie;
 import com.zeeb.moviecataloguelocalstorage.network.ApiConfig;
 import com.zeeb.moviecataloguelocalstorage.network.ApiService;
 

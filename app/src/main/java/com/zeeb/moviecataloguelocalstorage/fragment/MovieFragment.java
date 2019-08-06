@@ -14,11 +14,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.zeeb.moviecataloguelocalstorage.R;
 import com.zeeb.moviecataloguelocalstorage.adapter.MovieAdapter;
 import com.zeeb.moviecataloguelocalstorage.data.remote.model.movie.ResponseMovie;
 import com.zeeb.moviecataloguelocalstorage.data.remote.model.movie.ResultsItemMovie;
+import com.zeeb.moviecataloguelocalstorage.network.ApiConfig;
 import com.zeeb.moviecataloguelocalstorage.viewmodel.MovieViewModel;
 
 import java.util.ArrayList;
@@ -27,11 +30,14 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MovieFragment extends Fragment {
+public class MovieFragment extends Fragment implements SearchView.OnQueryTextListener {
 
 
     @BindView(R.id.rvMovie)
@@ -39,10 +45,12 @@ public class MovieFragment extends Fragment {
     Unbinder unbinder;
     @BindView(R.id.progressBarMovi)
     ProgressBar progressBarMovi;
+    @BindView(R.id.svMovie)
+    SearchView svMovie;
 
     private MovieAdapter movieAdapter;
 
-    ArrayList<ResultsItemMovie> resultsItemMovieArrayList = new ArrayList<>();
+    List<ResultsItemMovie> resultsItemMovieArrayList = new ArrayList<>();
     MovieViewModel movieViewModel;
 
     public static final String MOVIE = "extra_movie";
@@ -66,21 +74,68 @@ public class MovieFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        svMovie.setQueryHint("Cari Movie");
+        svMovie.setOnQueryTextListener(this);
+        svMovie.setIconified(false);
+
         showLoading(true);
 
+        getMovie();
+
+        setupRecyclerView();
+
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        rvMovie.setVisibility(View.GONE);
+        showLoading(true);
+        ApiConfig.getInitRetrofit().searchMovie(newText).enqueue(new Callback<ResponseMovie>() {
+            @Override
+            public void onResponse(Call<ResponseMovie> call, Response<ResponseMovie> response) {
+                showLoading(false);
+                rvMovie.setVisibility(View.VISIBLE);
+                if ((response.body() != null ? response.body().getResults() : null) != null){
+                    ResponseMovie responseMovie = response.body();
+                    resultsItemMovieArrayList = responseMovie.getResults();
+                    movieAdapter = new MovieAdapter(getActivity(), resultsItemMovieArrayList);
+                    rvMovie.setAdapter(movieAdapter);
+                }else {
+                    showLoading(false);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseMovie> call, Throwable t) {
+                showLoading(false);
+            }
+        });
+        return true;
+    }
+
+    public void getMovie() {
         movieViewModel = ViewModelProviders.of(this).get(MovieViewModel.class);
         movieViewModel.initMovie();
         movieViewModel.getMoviesModel().observe(this, new Observer<ResponseMovie>() {
             @Override
             public void onChanged(@Nullable ResponseMovie responseMovie) {
-                List<ResultsItemMovie> resultsItemMovies = responseMovie.getResults();
-                resultsItemMovieArrayList.addAll(resultsItemMovies);
-                movieAdapter.notifyDataSetChanged();
-                showLoading(false);
+                if ((responseMovie != null ? responseMovie.getResults() : null) == null) {
+                    Toast.makeText(getActivity(), getString(R.string.nodatafound), Toast.LENGTH_SHORT).show();
+                    showLoading(false);
+                } else {
+                    List<ResultsItemMovie> resultsItemMovies = responseMovie.getResults();
+                    resultsItemMovieArrayList.addAll(resultsItemMovies);
+                    movieAdapter.notifyDataSetChanged();
+                    showLoading(false);
+
+                }
             }
         });
-
-        setupRecyclerView();
 
     }
 
@@ -105,8 +160,16 @@ public class MovieFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        getMovie();
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
     }
+
+
 }

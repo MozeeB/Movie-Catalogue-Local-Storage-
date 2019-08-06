@@ -1,5 +1,6 @@
 package com.zeeb.moviecataloguelocalstorage.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,7 +10,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.github.ivbaranov.mfb.MaterialFavoriteButton;
@@ -20,6 +20,7 @@ import com.zeeb.moviecataloguelocalstorage.data.remote.model.tvshow.ResultsItemT
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import es.dmoral.toasty.Toasty;
 
 public class DetailTvShowActivity extends AppCompatActivity {
 
@@ -43,6 +44,8 @@ public class DetailTvShowActivity extends AppCompatActivity {
     ResultsItemTvShow resultsItemTvShow;
     @BindView(R.id.toolbar2)
     Toolbar toolbar2;
+    @BindView(R.id.judldetailtol)
+    TextView judldetailtol;
     private TvShowDatabase tvShowDatabase;
 
     MaterialFavoriteButton materialFavoriteButtonNice;
@@ -54,8 +57,16 @@ public class DetailTvShowActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar2);
 
+
         materialFavoriteButtonNice = (MaterialFavoriteButton) findViewById(R.id.favorite_nice);
         resultsItemTvShow = getIntent().getParcelableExtra(EXTRATVSHOW);
+
+        if (savedInstanceState != null) {
+            showLoading(false);
+        } else {
+            showLoading(true);
+
+        }
 
         tvShowDatabase = TvShowDatabase.getTvShowDatabase(this);
         if (tvShowDatabase.tvShowDao().selectItem(String.valueOf(resultsItemTvShow.getId())) != null) {
@@ -63,7 +74,7 @@ public class DetailTvShowActivity extends AppCompatActivity {
         }
         imageView2.setVisibility(View.GONE);
         textView3.setVisibility(View.GONE);
-        showLoading(true);
+        materialFavoriteButtonNice.setVisibility(View.GONE);
         setUpDelay();
 
         initFavorite(this);
@@ -71,18 +82,20 @@ public class DetailTvShowActivity extends AppCompatActivity {
 
     private void setUpDelay() {
         new Handler().postDelayed(new Runnable() {
+            @SuppressLint({"ResourceAsColor", "SetTextI18n"})
             @Override
             public void run() {
                 imageView2.setVisibility(View.VISIBLE);
                 textView3.setVisibility(View.VISIBLE);
-                getSupportActionBar().setTitle(getString(R.string.detailfilm) + " " + resultsItemTvShow.getName());
+                materialFavoriteButtonNice.setVisibility(View.VISIBLE);
+                judldetailtol.setText(getString(R.string.detailfilm) + " " + resultsItemTvShow.getName());
                 Glide.with(DetailTvShowActivity.this).load(BuildConfig.URLIMAGE + resultsItemTvShow.getBackdropPath()).into(imgDetailTvShow);
                 tvJudulDetailTvShow.setText(resultsItemTvShow.getName());
                 tvDetailScoreTvShow.setText(String.valueOf(resultsItemTvShow.getVoteAverage()));
                 tvDetailDesTvShow.setText(resultsItemTvShow.getOverview());
                 showLoading(false);
             }
-        }, 2000);
+        }, 1000);
     }
 
 
@@ -94,11 +107,10 @@ public class DetailTvShowActivity extends AppCompatActivity {
                         if (favorite) {
                             tvShowDatabase = TvShowDatabase.getTvShowDatabase(context);
                             tvShowDatabase.tvShowDao().InsertTvShow(resultsItemTvShow);
-                            Toast.makeText(DetailTvShowActivity.this, "Saved fav!!", Toast.LENGTH_SHORT).show();
+                            Toasty.success(DetailTvShowActivity.this, R.string.addFav, Toasty.LENGTH_SHORT).show();
                         } else {
                             tvShowDatabase = TvShowDatabase.getTvShowDatabase(context);
-                            tvShowDatabase.tvShowDao().deleteTvShow(resultsItemTvShow);
-                            Toast.makeText(DetailTvShowActivity.this, "Deleted fav!", Toast.LENGTH_SHORT).show();
+                            tvShowDatabase.tvShowDao().deleteTvShow(resultsItemTvShow.getId());
                         }
                     }
                 });
