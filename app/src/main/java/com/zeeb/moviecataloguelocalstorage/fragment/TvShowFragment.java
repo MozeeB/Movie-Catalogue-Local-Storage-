@@ -76,6 +76,7 @@ public class TvShowFragment extends Fragment implements SearchView.OnQueryTextLi
         svTvShow.setQueryHint("Cari Tv Show");
         svTvShow.setOnQueryTextListener(this);
         svTvShow.setIconified(false);
+        svTvShow.clearFocus();
         showLoading(true);
 
         getTvShow();

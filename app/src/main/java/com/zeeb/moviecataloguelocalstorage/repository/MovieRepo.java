@@ -1,13 +1,9 @@
 package com.zeeb.moviecataloguelocalstorage.repository;
 
-import android.app.Application;
-import android.arch.lifecycle.LiveData;
+
 import android.arch.lifecycle.MutableLiveData;
 
-import com.zeeb.moviecataloguelocalstorage.data.local.movie.MovieDao;
-import com.zeeb.moviecataloguelocalstorage.data.local.movie.MovieDatabase;
 import com.zeeb.moviecataloguelocalstorage.data.remote.model.movie.ResponseMovie;
-import com.zeeb.moviecataloguelocalstorage.data.remote.model.movie.ResultsItemMovie;
 import com.zeeb.moviecataloguelocalstorage.network.ApiConfig;
 import com.zeeb.moviecataloguelocalstorage.network.ApiService;
 
@@ -51,5 +47,29 @@ public class MovieRepo {
 
         return movieData;
     }
+
+
+    public MutableLiveData<ResponseMovie> searchMovie(String text){
+        final MutableLiveData<ResponseMovie> movieMutableLiveData = new MutableLiveData<>();
+        apiService.searchMovie(text).enqueue(new Callback<ResponseMovie>() {
+            @Override
+            public void onResponse(Call<ResponseMovie> call, Response<ResponseMovie> response) {
+                if (response.isSuccessful()){
+                    movieMutableLiveData.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseMovie> call, Throwable t) {
+                movieMutableLiveData.setValue(null);
+            }
+        });
+
+        return movieMutableLiveData;
+    }
+
+
+
+
 
 }

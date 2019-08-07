@@ -25,6 +25,18 @@ public class MovieViewModel extends ViewModel {
         return responseMovieMutableLiveData;
     }
 
+
+    public void initSearchMovie(String text){
+        if (responseMovieMutableLiveData != null){
+            return;
+        }
+        MovieRepo movieRepo = MovieRepo.getInstancemovie();
+        responseMovieMutableLiveData = movieRepo.searchMovie(text);
+    }
+    public LiveData<ResponseMovie> searchMovie(String judul){
+        return responseMovieMutableLiveData;
+    }
+
     //TVSHOW
     private MutableLiveData<ResponseTvShow> responseTvShowMutableLiveData;
 

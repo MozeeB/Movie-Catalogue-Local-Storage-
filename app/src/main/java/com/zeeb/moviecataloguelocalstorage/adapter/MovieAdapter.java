@@ -29,6 +29,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         this.resultsItemMovies = resultsItemMovies;
     }
 
+    public void setResultsItemMovies(List<ResultsItemMovie> resultsItemMovies) {
+        this.resultsItemMovies = resultsItemMovies;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {

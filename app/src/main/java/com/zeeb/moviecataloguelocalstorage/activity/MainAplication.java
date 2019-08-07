@@ -7,6 +7,9 @@ import com.orhanobut.hawk.Hawk;
 
 public class MainAplication extends Application {
 
+    public static final String KEY_TITLE = "title";
+    public static final String KEY_FRAGMENT = "fragment";
+
     @Override
     public void onCreate() {
         super.onCreate();
