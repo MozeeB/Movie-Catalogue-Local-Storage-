@@ -1,5 +1,6 @@
 package com.zeeb.moviecataloguelocalstorage.reminder;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -24,9 +25,6 @@ import java.util.List;
 
 public class ReleaseTodayReminder extends BroadcastReceiver {
 
-
-    private static final int NOTIFICATION_ID = 101;
-
     public static final String NOTIFICATION_CHANNEL_ID = "10001";
 
     private static int notifId = 1000;
@@ -37,7 +35,6 @@ public class ReleaseTodayReminder extends BroadcastReceiver {
         int notifId = intent.getIntExtra("id", 0);
         String title = intent.getStringExtra("title");
 
-
         showAlarmNotification(context, title, notifId);
     }
 
@@ -46,12 +43,11 @@ public class ReleaseTodayReminder extends BroadcastReceiver {
                 Context.NOTIFICATION_SERVICE);
 
         Intent intent = new Intent(context, DetailMovieActivity.class);
-//        intent.putExtra(DetailActivity.MOVIE_INTENT, movie);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, notifId, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
         Uri alarmRingtone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+        @SuppressLint({"StringFormatInvalid", "LocalSuppress"}) NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.ic_alarm_black_24dp)
                 .setContentTitle(title)
                 .setContentText(String.valueOf(String.format(context.getString(R.string.upcoming_reminder_msg), title)))
@@ -91,8 +87,8 @@ public class ReleaseTodayReminder extends BroadcastReceiver {
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.HOUR_OF_DAY, 15);
-            calendar.set(Calendar.MINUTE, 16);
+            calendar.set(Calendar.HOUR_OF_DAY, 8);
+            calendar.set(Calendar.MINUTE, 0);
             calendar.set(Calendar.SECOND, 0);
 
             int SDK_INT = Build.VERSION.SDK_INT;

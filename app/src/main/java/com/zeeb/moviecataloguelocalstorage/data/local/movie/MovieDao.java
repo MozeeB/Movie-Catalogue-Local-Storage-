@@ -28,4 +28,7 @@ public interface MovieDao {
     @Query("SELECT * FROM tb_movie")
     List<ResultsItemMovie> getFavoriteNoCursor();
 
+    @Query("SELECT * FROM tb_movie WHERE id = :id")
+    ResultsItemMovie selectItemNoCursor(String id);
+
 }

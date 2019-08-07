@@ -29,18 +29,22 @@
     <string name="no_favorite">No Favorite</string>
 
     <!--//-->
-    <string name="action_notification">Notifications</string>
+    <string name="action_notification">Notifikasi</string>
     <string name="key_reminder_daily">key_daily_reminder</string>
     <string name="label_daily_reminder_summary">Turn on/off daily reminder</string>
-    <string name="label_daily_reminder_title">Daily Reminder</string>
-    <string name="label_upcoming_reminder_title">Upcoming Reminder</string>
+    <string name="label_daily_reminder_title">Pengingat Harian</string>
+    <string name="label_upcoming_reminder_title">Pengingat Mendatang</string>
     <string name="key_reminder_upcoming">key_upcoming_reminder</string>
     <string name="label_upcoming_reminder_summary">Turn on/off upcoming reminder</string>
     <string name="key_setting_locale">key_setting_locale</string>
     <string name="label_setting_locale_summary">Setting Locale</string>
     <string name="label_setting_locale_title">Change your phone localization</string>
-    <string name="msg_daily_reminder">Hi, movie apps are waiting for you!</string>
-    <string name="upcoming_reminder_msg">Hi, today %s is release  </string>
+    <string name="msg_daily_reminder">Hai, aplikasi film sedang menunggu Anda!</string>
+    <string name="upcoming_reminder_msg">Hai, hari ini adalah rilis  </string>
+    <string name="release_reminder">Pengingat rilis film</string>
+    <string name="reminder_showing_the_movie_that_released_today">Pengingat menunjukkan film yang dirilis hari ini</string>
+    <string name="reminder_for_return_top_app">Pengingat untuk kembali ke aplikasi</string>
+    <string name="reminder">Pengingat</string>
 
 
 </resources>

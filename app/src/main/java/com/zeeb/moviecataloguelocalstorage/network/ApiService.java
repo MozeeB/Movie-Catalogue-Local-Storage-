@@ -23,7 +23,7 @@ public interface ApiService {
     @GET("search/tv?api_key=" + BuildConfig.API_KEY + "&language=en-US")
     Call<ResponseTvShow> searchTvShow(@Query("query") String tvshow);
 
-    @GET("movie?api_key=" + BuildConfig.API_KEY)
+    @GET("discover/movie?api_key=" + BuildConfig.API_KEY)
     Call<ResponseMovie> getReleaseToday(@Query("primary_release_date.gte") String tgl1,
                                         @Query("primary_release_date.lte") String tgl2);
 

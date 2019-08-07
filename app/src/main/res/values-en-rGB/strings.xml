@@ -44,4 +44,10 @@
     <string name="msg_daily_reminder">Hi, movie apps are waiting for you!</string>
     <string name="upcoming_reminder_msg" >Hi, today %s is release  </string>
 
+    <string name="release_reminder">Movie release Reminder</string>
+    <string name="reminder_showing_the_movie_that_released_today">Reminder showing the movie that released today</string>
+    <string name="reminder_for_return_top_app">Reminder for return top app</string>
+    <string name="reminder">Reminder</string>
+
+
 </resources>

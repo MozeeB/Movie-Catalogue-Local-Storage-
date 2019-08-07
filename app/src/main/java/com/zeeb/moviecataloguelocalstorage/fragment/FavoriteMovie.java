@@ -80,6 +80,7 @@ public class FavoriteMovie extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         showLoading(true);
+        movieDatabase = MovieDatabase.getMovieDatabase(getActivity());
         getFavorite();
         setupRecyclerView();
 
@@ -105,7 +106,6 @@ public class FavoriteMovie extends Fragment {
     }
 
     public void getFavorite() {
-        movieDatabase = MovieDatabase.getMovieDatabase(getActivity());
         if (movieDatabase.movieDao().getFavoriteMovie() == null) {
             Toast.makeText(getActivity(), getString(R.string.noFavData), Toast.LENGTH_SHORT).show();
             showLoading(false);

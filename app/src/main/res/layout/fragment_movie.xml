@@ -22,6 +22,7 @@
             android:layout_height="match_parent"
             android:layout_margin="5dp"
             android:layout_marginTop="5dp"
+            android:focusableInTouchMode="true"
             android:background="@drawable/bgsvcustom"
             android:backgroundTint="@color/white"
             app:layout_constraintBottom_toTopOf="@+id/rvMovie"

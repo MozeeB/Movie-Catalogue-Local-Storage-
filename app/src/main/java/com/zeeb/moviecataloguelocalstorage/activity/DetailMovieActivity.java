@@ -25,6 +25,7 @@ import es.dmoral.toasty.Toasty;
 public class DetailMovieActivity extends AppCompatActivity {
 
     public static final String EXTRAMOVIE = "extra_movie";
+
     @BindView(R.id.imgDetailMovie)
     ImageView imgDetailMovie;
     @BindView(R.id.tvJudulDetail)
@@ -55,19 +56,20 @@ public class DetailMovieActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail_movie);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar3);
-        resultsItemMovie = getIntent().getParcelableExtra(EXTRAMOVIE);
 
         materialFavoriteButtonNice = (MaterialFavoriteButton) findViewById(R.id.favorite_nice);
+        resultsItemMovie = getIntent().getParcelableExtra(EXTRAMOVIE);
 
         if (savedInstanceState != null) {
             showLoading(false);
         } else {
             showLoading(true);
+
         }
 
 
         movieDatabase = MovieDatabase.getMovieDatabase(this);
-        if (movieDatabase.movieDao().selectItem(Long.parseLong(String.valueOf(resultsItemMovie.getId()))) != null) {
+        if (movieDatabase.movieDao().selectItemNoCursor(String.valueOf(resultsItemMovie.getId())) != null) {
             materialFavoriteButtonNice.setFavorite(true);
         }
         imageView2.setVisibility(View.GONE);
@@ -77,25 +79,6 @@ public class DetailMovieActivity extends AppCompatActivity {
 
         initFavorite(this);
 
-
-    }
-
-    private void initFavorite(final Context context) {
-        materialFavoriteButtonNice.setOnFavoriteChangeListener(
-                new MaterialFavoriteButton.OnFavoriteChangeListener() {
-                    @Override
-                    public void onFavoriteChanged(MaterialFavoriteButton buttonView, boolean favorite) {
-                        if (favorite) {
-                            movieDatabase = MovieDatabase.getMovieDatabase(context);
-                            movieDatabase.movieDao().insertMovie(resultsItemMovie);
-                            Toasty.success(DetailMovieActivity.this, R.string.addFav, Toasty.LENGTH_SHORT).show();
-                        } else {
-                            movieDatabase = MovieDatabase.getMovieDatabase(context);
-                            movieDatabase.movieDao().deleteMovie(resultsItemMovie.getId());
-                        }
-
-                    }
-                });
 
     }
 
@@ -116,6 +99,28 @@ public class DetailMovieActivity extends AppCompatActivity {
             }
         }, 1000);
     }
+
+    private void initFavorite(final Context context) {
+        materialFavoriteButtonNice.setOnFavoriteChangeListener(
+                new MaterialFavoriteButton.OnFavoriteChangeListener() {
+                    @Override
+                    public void onFavoriteChanged(MaterialFavoriteButton buttonView, boolean favorite) {
+                        if (favorite) {
+                            movieDatabase = MovieDatabase.getMovieDatabase(context);
+                            movieDatabase.movieDao().insertMovie(resultsItemMovie);
+                            Toasty.success(DetailMovieActivity.this, R.string.addFav, Toasty.LENGTH_SHORT).show();
+
+                        } else {
+                            movieDatabase = MovieDatabase.getMovieDatabase(context);
+                            movieDatabase.movieDao().deleteMovie(resultsItemMovie.getId());
+                        }
+
+                    }
+                });
+
+    }
+
+
 
     private void showLoading(Boolean state) {
         if (state) {

@@ -21,7 +21,8 @@
 
         <activity android:name=".activity.ReminderActivity"
             android:theme="@style/AppThemeReminder"
-            android:parentActivityName=".activity.MainActivity"/>
+            android:parentActivityName=".activity.MainActivity"
+            android:label="@string/reminder"/>
 
         <receiver
             android:name=".reminder.ReleaseTodayReminder"

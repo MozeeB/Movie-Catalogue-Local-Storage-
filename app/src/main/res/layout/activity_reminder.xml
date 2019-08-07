@@ -23,13 +23,14 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Release Reminder"
+                android:textStyle="bold"
+                android:text="@string/release_reminder"
                 android:textSize="24sp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Reminder showing the movie that released today" />
+                android:text="@string/reminder_showing_the_movie_that_released_today" />
         </LinearLayout>
 
     <LinearLayout
@@ -63,13 +64,14 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Daily Reminder"
+                android:textStyle="bold"
+                android:text="@string/label_daily_reminder_title"
                 android:textSize="24sp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Reminder for return top app" />
+                android:text="@string/reminder_for_return_top_app" />
         </LinearLayout>
 
         <LinearLayout

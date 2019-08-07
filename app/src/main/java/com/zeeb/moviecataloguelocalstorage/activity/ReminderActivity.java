@@ -1,10 +1,12 @@
 package com.zeeb.moviecataloguelocalstorage.activity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
+import com.orhanobut.hawk.Hawk;
 import com.zeeb.moviecataloguelocalstorage.R;
 import com.zeeb.moviecataloguelocalstorage.data.remote.model.movie.ResponseMovie;
 import com.zeeb.moviecataloguelocalstorage.data.remote.model.movie.ResultsItemMovie;
@@ -12,7 +14,10 @@ import com.zeeb.moviecataloguelocalstorage.network.ApiConfig;
 import com.zeeb.moviecataloguelocalstorage.reminder.DailyReminder;
 import com.zeeb.moviecataloguelocalstorage.reminder.ReleaseTodayReminder;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -33,6 +38,7 @@ public class ReminderActivity extends AppCompatActivity {
     private ReleaseTodayReminder releaseTodayReminder;
 
     List<ResultsItemMovie> resultsItemMovies = new ArrayList<>();
+    String formattedDate;
 
 
     @Override
@@ -40,6 +46,24 @@ public class ReminderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reminder);
         ButterKnife.bind(this);
+
+        if (Hawk.contains("daily")){
+            swtDaily.setChecked(true);
+        }else{
+            swtDaily.setChecked(false);
+        }
+
+
+        if (Hawk.contains("release")){
+            swtrelease.setChecked(true);
+        }else {
+            swtrelease.setChecked(false);
+        }
+
+        Date c = Calendar.getInstance().getTime();
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        formattedDate = df.format(c);
+
 
         dailyReminder = new DailyReminder();
         releaseTodayReminder = new ReleaseTodayReminder();
@@ -50,17 +74,17 @@ public class ReminderActivity extends AppCompatActivity {
 
         setSwtDaily();
 
+
+
     }
 
     public void getReleaseToday(){
-        ApiConfig.getInitRetrofit().getReleaseToday("2019-08-06", "2019-08-06").enqueue(new Callback<ResponseMovie>() {
+        ApiConfig.getInitRetrofit().getReleaseToday(formattedDate, formattedDate).enqueue(new Callback<ResponseMovie>() {
             @Override
             public void onResponse(Call<ResponseMovie> call, Response<ResponseMovie> response) {
                 if (response.isSuccessful()){
                     ResponseMovie responseMovie = response.body();
                     resultsItemMovies = responseMovie.getResults();
-                    Toasty.success(ReminderActivity.this, "data here", Toasty.LENGTH_LONG).show();
-
                 }else {
                     Toasty.error(ReminderActivity.this, "No data", Toasty.LENGTH_LONG).show();
                 }
@@ -80,10 +104,10 @@ public class ReminderActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (buttonView.isChecked()){
                     dailyReminder.setRepeatingAlrm(ReminderActivity.this);
-                    Toasty.info(ReminderActivity.this, "Switch on ", Toasty.LENGTH_LONG).show();
+                    Hawk.put("daily", "");
                 }else {
-                    Toasty.info(ReminderActivity.this, "Switch off ", Toasty.LENGTH_LONG).show();
                     dailyReminder.cancelAlarm(ReminderActivity.this);
+                    Hawk.delete("daily");
 
                 }
 
@@ -96,11 +120,11 @@ public class ReminderActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (buttonView.isChecked()){
-                    Toasty.info(ReminderActivity.this, "Switch on ", Toasty.LENGTH_LONG).show();
                     releaseTodayReminder.setRepeatingAlarm(ReminderActivity.this, resultsItemMovies);
+                    Hawk.put("release", "");
                 }else {
-                    Toasty.info(ReminderActivity.this, "Switch off ", Toasty.LENGTH_LONG).show();
                     releaseTodayReminder.cancelAlarm(ReminderActivity.this);
+                    Hawk.delete("release");
 
                 }
             }
