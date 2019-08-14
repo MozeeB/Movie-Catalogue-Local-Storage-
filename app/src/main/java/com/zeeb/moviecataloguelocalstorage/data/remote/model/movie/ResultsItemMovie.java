@@ -1,8 +1,10 @@
 package com.zeeb.moviecataloguelocalstorage.data.remote.model.movie;
 
+import android.annotation.SuppressLint;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -65,6 +67,18 @@ import com.google.gson.annotations.SerializedName;
     @ColumnInfo(name = "vote_count")
     @SerializedName("vote_count")
     private int voteCount;
+
+    @SuppressLint("NewApi")
+    public static ResultsItemMovie fromContentValues(ContentValues values) {
+        final ResultsItemMovie movie = new ResultsItemMovie();
+        if (values.containsKey("id")) {
+            movie.id = Math.toIntExact(values.getAsLong("id"));
+        }
+        if (values.containsKey("original_title")) {
+            movie.originalTitle = values.getAsString("original_title");
+        }
+        return movie;
+    }
 
 
     public String getOverview() {

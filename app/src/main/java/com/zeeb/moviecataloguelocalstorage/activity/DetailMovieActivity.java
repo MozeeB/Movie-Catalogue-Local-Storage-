@@ -57,7 +57,7 @@ public class DetailMovieActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar3);
 
-        materialFavoriteButtonNice = (MaterialFavoriteButton) findViewById(R.id.favorite_nice);
+        materialFavoriteButtonNice = findViewById(R.id.favorite_nice);
         resultsItemMovie = getIntent().getParcelableExtra(EXTRAMOVIE);
 
         if (savedInstanceState != null) {
@@ -107,12 +107,12 @@ public class DetailMovieActivity extends AppCompatActivity {
                     public void onFavoriteChanged(MaterialFavoriteButton buttonView, boolean favorite) {
                         if (favorite) {
                             movieDatabase = MovieDatabase.getMovieDatabase(context);
-                            movieDatabase.movieDao().insertMovie(resultsItemMovie);
+                            movieDatabase.movieDao().insert(resultsItemMovie);
                             Toasty.success(DetailMovieActivity.this, R.string.addFav, Toasty.LENGTH_SHORT).show();
 
                         } else {
                             movieDatabase = MovieDatabase.getMovieDatabase(context);
-                            movieDatabase.movieDao().deleteMovie(resultsItemMovie.getId());
+                            movieDatabase.movieDao().deleteById(resultsItemMovie.getId());
                         }
 
                     }

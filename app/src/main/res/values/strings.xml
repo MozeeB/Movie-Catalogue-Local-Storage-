@@ -45,6 +45,8 @@
     <string name="reminder_showing_the_movie_that_released_today">Pengingat menunjukkan film yang dirilis hari ini</string>
     <string name="reminder_for_return_top_app">Pengingat untuk kembali ke aplikasi</string>
     <string name="reminder">Pengingat</string>
+    <string name="search_movie">Cari Film</string>
+    <string name="search_tv_show">Cari Acara TV</string>
 
 
 </resources>

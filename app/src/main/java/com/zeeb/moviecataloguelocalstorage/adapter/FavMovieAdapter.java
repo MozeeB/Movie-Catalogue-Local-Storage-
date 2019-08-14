@@ -70,7 +70,7 @@ public class FavMovieAdapter extends RecyclerView.Adapter<FavMovieAdapter.ViewHo
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         MovieDatabase movieDatabase = MovieDatabase.getMovieDatabase(context);
-                        movieDatabase.movieDao().deleteMovie(resultsItemMovies.get(viewHolder.getAdapterPosition()).getId());
+                        movieDatabase.movieDao().deleteById(resultsItemMovies.get(viewHolder.getAdapterPosition()).getId());
                         Toasty.success(context, R.string.successDel, Toast.LENGTH_SHORT).show();
                         resultsItemMovies.remove(resultsItemMovies.get(viewHolder.getAdapterPosition()));
                         notifyItemRemoved(viewHolder.getAdapterPosition());

@@ -39,14 +39,13 @@ public class FavoriteTvShow extends Fragment {
     @BindView(R.id.progressBarFavTvShow)
     ProgressBar progressBarFavTvShow;
     Unbinder unbinder;
-    private FragmentManager fragmentManager;
 
     List<ResultsItemTvShow> resultsItemMovieArrayList = new ArrayList<>();
     TvShowDatabase tvShowDatabase;
     FavTvShowAdapater adapter;
 
     public void setFragmentManager(FragmentManager fragmentManager) {
-        this.fragmentManager = fragmentManager;
+        FragmentManager fragmentManager1 = fragmentManager;
     }
 
     public static FavoriteTvShow newInstance(FragmentManager fragmentManager) {

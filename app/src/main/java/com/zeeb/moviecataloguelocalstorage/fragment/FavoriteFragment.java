@@ -21,7 +21,6 @@ import com.zeeb.moviecataloguelocalstorage.adapter.TablayoutAdapter;
 public class FavoriteFragment extends Fragment {
 
 
-    private TablayoutAdapter tabLayoutAdapter;
     private FragmentManager fragmentManager;
 
 
@@ -56,15 +55,15 @@ public class FavoriteFragment extends Fragment {
     }
 
     private void setPager(View view) {
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.vp_containerELearning);
+        ViewPager viewPager = view.findViewById(R.id.vp_containerELearning);
         setupViewPager(viewPager);
 
-        TabLayout tabs = (TabLayout) view.findViewById(R.id.tl_tabsAbsence);
+        TabLayout tabs = view.findViewById(R.id.tl_tabsAbsence);
         tabs.setupWithViewPager(viewPager);
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        tabLayoutAdapter = new TablayoutAdapter(getChildFragmentManager());
+        TablayoutAdapter tabLayoutAdapter = new TablayoutAdapter(getChildFragmentManager());
         tabLayoutAdapter.addFragment(FavoriteMovie.newInstance(fragmentManager), getString(R.string.Movies));
         tabLayoutAdapter.addFragment(FavoriteTvShow.newInstance(fragmentManager), getString(R.string.TvShows));
         viewPager.setAdapter(tabLayoutAdapter);

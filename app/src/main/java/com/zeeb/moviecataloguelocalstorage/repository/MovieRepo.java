@@ -55,7 +55,9 @@ public class MovieRepo {
             @Override
             public void onResponse(Call<ResponseMovie> call, Response<ResponseMovie> response) {
                 if (response.isSuccessful()){
-                    movieMutableLiveData.setValue(response.body());
+                    if (response.body() != null){
+                        movieMutableLiveData.setValue(response.body());
+                    }
                 }
             }
 

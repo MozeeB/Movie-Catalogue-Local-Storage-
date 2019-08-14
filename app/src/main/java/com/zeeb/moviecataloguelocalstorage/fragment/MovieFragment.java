@@ -3,6 +3,7 @@ package com.zeeb.moviecataloguelocalstorage.fragment;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,6 +20,7 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.zeeb.moviecataloguelocalstorage.R;
+import com.zeeb.moviecataloguelocalstorage.activity.SearchMovieActivity;
 import com.zeeb.moviecataloguelocalstorage.adapter.MovieAdapter;
 import com.zeeb.moviecataloguelocalstorage.data.remote.model.movie.ResponseMovie;
 import com.zeeb.moviecataloguelocalstorage.data.remote.model.movie.ResultsItemMovie;
@@ -38,7 +40,7 @@ import retrofit2.Response;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MovieFragment extends Fragment implements SearchView.OnQueryTextListener {
+public class MovieFragment extends Fragment {
 
 
     @BindView(R.id.rvMovie)
@@ -76,11 +78,12 @@ public class MovieFragment extends Fragment implements SearchView.OnQueryTextLis
         super.onViewCreated(view, savedInstanceState);
 
 
-        svMovie.setQueryHint("Cari Movie");
-        svMovie.setOnQueryTextListener(this);
-        svMovie.setIconified(false);
-        svMovie.clearFocus();
-
+        svMovie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), SearchMovieActivity.class));
+            }
+        });
         showLoading(true);
 
         getMovie();
@@ -89,37 +92,6 @@ public class MovieFragment extends Fragment implements SearchView.OnQueryTextLis
 
     }
 
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        rvMovie.setVisibility(View.GONE);
-        showLoading(true);
-        ApiConfig.getInitRetrofit().searchMovie(newText).enqueue(new Callback<ResponseMovie>() {
-            @Override
-            public void onResponse(Call<ResponseMovie> call, Response<ResponseMovie> response) {
-                showLoading(false);
-                rvMovie.setVisibility(View.VISIBLE);
-                if ((response.body() != null ? response.body().getResults() : null) != null){
-                    ResponseMovie responseMovie = response.body();
-                    resultsItemMovieArrayList = responseMovie.getResults();
-                    movieAdapter = new MovieAdapter(getActivity(), resultsItemMovieArrayList);
-                    rvMovie.setAdapter(movieAdapter);
-                }else {
-                    showLoading(false);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseMovie> call, Throwable t) {
-                showLoading(false);
-            }
-        });
-        return true;
-    }
 
     public void getMovie() {
         movieViewModel = ViewModelProviders.of(this).get(MovieViewModel.class);

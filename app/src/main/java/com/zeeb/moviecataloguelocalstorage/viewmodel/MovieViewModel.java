@@ -26,6 +26,7 @@ public class MovieViewModel extends ViewModel {
     }
 
 
+    //
     public void initSearchMovie(String text){
         if (responseMovieMutableLiveData != null){
             return;
@@ -33,7 +34,7 @@ public class MovieViewModel extends ViewModel {
         MovieRepo movieRepo = MovieRepo.getInstancemovie();
         responseMovieMutableLiveData = movieRepo.searchMovie(text);
     }
-    public LiveData<ResponseMovie> searchMovie(String judul){
+    public LiveData<ResponseMovie> searchMovie(){
         return responseMovieMutableLiveData;
     }
 

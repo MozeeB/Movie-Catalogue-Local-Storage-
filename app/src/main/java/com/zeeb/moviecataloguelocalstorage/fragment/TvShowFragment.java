@@ -3,6 +3,7 @@ package com.zeeb.moviecataloguelocalstorage.fragment;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,6 +19,7 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.zeeb.moviecataloguelocalstorage.R;
+import com.zeeb.moviecataloguelocalstorage.activity.SearchTvShowActivity;
 import com.zeeb.moviecataloguelocalstorage.adapter.TvShowAdapter;
 import com.zeeb.moviecataloguelocalstorage.data.remote.model.tvshow.ResponseTvShow;
 import com.zeeb.moviecataloguelocalstorage.data.remote.model.tvshow.ResultsItemTvShow;
@@ -37,7 +39,7 @@ import retrofit2.Response;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TvShowFragment extends Fragment implements SearchView.OnQueryTextListener {
+public class TvShowFragment extends Fragment {
 
 
     @BindView(R.id.rvTvShow)
@@ -73,10 +75,12 @@ public class TvShowFragment extends Fragment implements SearchView.OnQueryTextLi
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        svTvShow.setQueryHint("Cari Tv Show");
-        svTvShow.setOnQueryTextListener(this);
-        svTvShow.setIconified(false);
-        svTvShow.clearFocus();
+        svTvShow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), SearchTvShowActivity.class));
+            }
+        });
         showLoading(true);
 
         getTvShow();
@@ -86,38 +90,6 @@ public class TvShowFragment extends Fragment implements SearchView.OnQueryTextLi
 
     }
 
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        rvTvShow.setVisibility(View.GONE);
-        showLoading(true);
-        ApiConfig.getInitRetrofit().searchTvShow(newText).enqueue(new Callback<ResponseTvShow>() {
-            @Override
-            public void onResponse(Call<ResponseTvShow> call, Response<ResponseTvShow> response) {
-                showLoading(false);
-                rvTvShow.setVisibility(View.VISIBLE);
-                if ((response.body() != null ? response.body().getResults() : null) != null){
-                    ResponseTvShow responseTvShow = response.body();
-                    resultsItemTvShowArrayList = responseTvShow.getResults();
-                    tvShowAdapter = new TvShowAdapter(getActivity(), resultsItemTvShowArrayList);
-                    rvTvShow.setAdapter(tvShowAdapter);
-
-                }else {
-                    showLoading(false);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseTvShow> call, Throwable t) {
-                showLoading(false);
-            }
-        });
-        return true;
-    }
 
     public void getTvShow() {
         movieViewModel = ViewModelProviders.of(this).get(MovieViewModel.class);

@@ -13,6 +13,7 @@ import android.support.annotation.Nullable;
 
 import com.zeeb.moviecataloguelocalstorage.data.local.movie.MovieDao;
 import com.zeeb.moviecataloguelocalstorage.data.local.movie.MovieDatabase;
+import com.zeeb.moviecataloguelocalstorage.data.remote.model.movie.ResultsItemMovie;
 
 @SuppressLint("Registered")
 public class MovieProvider extends ContentProvider {
@@ -32,6 +33,7 @@ public class MovieProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
+
         return true;
     }
 
@@ -75,12 +77,41 @@ public class MovieProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
-        return null;
+        switch (MATCHER.match(uri)) {
+            case CODE_MOVIE_DIR:
+                final Context context = getContext();
+                if (context == null) {
+                    return null;
+                }
+                final long id = MovieDatabase.getMovieDatabase(context).movieDao()
+                        .insert(ResultsItemMovie.fromContentValues(values));
+                context.getContentResolver().notifyChange(uri, null);
+                return ContentUris.withAppendedId(uri, id);
+            case CODE_MOVIE_ITEM:
+                throw new IllegalArgumentException("Invalid URI, cannot insert with ID: " + uri);
+            default:
+                throw new IllegalArgumentException("Unknown URI: " + uri);
+        }
+
     }
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
-        return 0;
+        switch (MATCHER.match(uri)) {
+            case CODE_MOVIE_DIR:
+                throw new IllegalArgumentException("Invalid URI, cannot update without ID" + uri);
+            case CODE_MOVIE_ITEM:
+                final Context context = getContext();
+                if (context == null) {
+                    return 0;
+                }
+                final int count = MovieDatabase.getMovieDatabase(context).movieDao()
+                        .deleteById(ContentUris.parseId(uri));
+                context.getContentResolver().notifyChange(uri, null);
+                return count;
+            default:
+                throw new IllegalArgumentException("Unknown URI: " + uri);
+        }
     }
 
     @Override

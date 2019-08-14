@@ -18,11 +18,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-
-        <activity android:name=".activity.ReminderActivity"
-            android:theme="@style/AppThemeReminder"
+        <activity android:name=".activity.SearchTvShowActivity"></activity>
+        <activity
+            android:name=".activity.SearchMovieActivity"
             android:parentActivityName=".activity.MainActivity"
-            android:label="@string/reminder"/>
+            android:theme="@style/AppThemeReminder" />
+        <activity
+            android:name=".activity.ReminderActivity"
+            android:label="@string/reminder"
+            android:parentActivityName=".activity.MainActivity"
+            android:theme="@style/AppThemeReminder" />
 
         <receiver
             android:name=".reminder.ReleaseTodayReminder"

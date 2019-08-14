@@ -18,7 +18,6 @@ import android.widget.Toast;
 
 import com.zeeb.moviecataloguelocalstorage.R;
 import com.zeeb.moviecataloguelocalstorage.adapter.FavMovieAdapter;
-import com.zeeb.moviecataloguelocalstorage.adapter.MovieAdapter;
 import com.zeeb.moviecataloguelocalstorage.data.local.movie.MovieDatabase;
 import com.zeeb.moviecataloguelocalstorage.data.remote.model.movie.ResultsItemMovie;
 
@@ -40,19 +39,15 @@ public class FavoriteMovie extends Fragment {
     RecyclerView rvFavMovie;
     @BindView(R.id.progressBarFavMov)
     ProgressBar progressBarFavMov;
-    Unbinder unbinder;
-    private FragmentManager fragmentManager;
-
-//    public static final String KEY_MOVIES = "movies";
+    private Unbinder unbinder;
 
     private MovieDatabase movieDatabase;
     private FavMovieAdapter movieAdapter;
 
-    List<ResultsItemMovie> resultsItemMovies = new ArrayList<>();
+    private List<ResultsItemMovie> resultsItemMovies = new ArrayList<>();
 
 
-    public void setFragmentManager(FragmentManager fragmentManager) {
-        this.fragmentManager = fragmentManager;
+    private void setFragmentManager(FragmentManager fragmentManager) {
     }
 
     public static FavoriteMovie newInstance(FragmentManager fragmentManager) {
@@ -101,11 +96,11 @@ public class FavoriteMovie extends Fragment {
 
     private void removeFav(long tag) {
         movieDatabase = MovieDatabase.getMovieDatabase(getActivity());
-        movieDatabase.movieDao().deleteMovie(tag);
+        movieDatabase.movieDao().deleteById(tag);
         Toasty.success(getActivity(), R.string.successDel, Toast.LENGTH_SHORT).show();
     }
 
-    public void getFavorite() {
+    private void getFavorite() {
         if (movieDatabase.movieDao().getFavoriteMovie() == null) {
             Toast.makeText(getActivity(), getString(R.string.noFavData), Toast.LENGTH_SHORT).show();
             showLoading(false);

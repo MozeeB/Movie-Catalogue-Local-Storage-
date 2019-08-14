@@ -58,7 +58,7 @@ public class DetailTvShowActivity extends AppCompatActivity {
         setSupportActionBar(toolbar2);
 
 
-        materialFavoriteButtonNice = (MaterialFavoriteButton) findViewById(R.id.favorite_nice);
+        materialFavoriteButtonNice = findViewById(R.id.favorite_nice);
         resultsItemTvShow = getIntent().getParcelableExtra(EXTRATVSHOW);
 
         if (savedInstanceState != null) {

@@ -50,7 +50,7 @@ public class ReleaseTodayReminder extends BroadcastReceiver {
         @SuppressLint({"StringFormatInvalid", "LocalSuppress"}) NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.ic_alarm_black_24dp)
                 .setContentTitle(title)
-                .setContentText(String.valueOf(String.format(context.getString(R.string.upcoming_reminder_msg), title)))
+                .setContentText(String.format(context.getString(R.string.upcoming_reminder_msg), title))
                 .setContentIntent(pendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setAutoCancel(true)
