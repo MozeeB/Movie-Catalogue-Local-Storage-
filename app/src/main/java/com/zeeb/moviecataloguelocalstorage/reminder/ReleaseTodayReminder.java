@@ -8,17 +8,14 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.zeeb.moviecataloguelocalstorage.R;
-import com.zeeb.moviecataloguelocalstorage.activity.DetailMovieActivity;
 import com.zeeb.moviecataloguelocalstorage.data.remote.model.movie.ResponseMovie;
 import com.zeeb.moviecataloguelocalstorage.data.remote.model.movie.ResultsItemMovie;
 import com.zeeb.moviecataloguelocalstorage.network.ApiConfig;
@@ -28,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
