@@ -18,9 +18,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activity.SearchTvShowActivity"></activity>
+        <receiver
+            android:name=".reminder.ReleaseMovie"
+            android:enabled="true"
+            android:exported="false"></receiver>
+
+        <activity
+            android:name=".activity.SearchTvShowActivity"
+            android:label="@string/search_tv_show"
+            android:parentActivityName=".activity.MainActivity"
+            android:theme="@style/AppThemeReminder" />
         <activity
             android:name=".activity.SearchMovieActivity"
+            android:label="@string/search_movie"
             android:parentActivityName=".activity.MainActivity"
             android:theme="@style/AppThemeReminder" />
         <activity
@@ -32,7 +42,7 @@
         <receiver
             android:name=".reminder.ReleaseTodayReminder"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="false" />
         <receiver
             android:name=".reminder.DailyReminder"
             android:enabled="true"

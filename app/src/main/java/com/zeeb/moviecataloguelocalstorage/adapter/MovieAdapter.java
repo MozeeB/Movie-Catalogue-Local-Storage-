@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.zeeb.moviecataloguelocalstorage.BuildConfig;
 import com.zeeb.moviecataloguelocalstorage.R;
 import com.zeeb.moviecataloguelocalstorage.activity.DetailMovieActivity;
@@ -40,7 +41,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
         viewHolder.judul.setText(resultsItemMovies.get(i).getOriginalTitle());
         viewHolder.score.setText(String.valueOf(resultsItemMovies.get(i).getVoteAverage()));
-        Glide.with(context).load(BuildConfig.URLIMAGE + resultsItemMovies.get(i).getPosterPath()).into(viewHolder.img);
+        Glide.with(context).load(BuildConfig.URLIMAGE + resultsItemMovies.get(i).getPosterPath())
+                .apply(new RequestOptions().override(350, 550).placeholder(R.mipmap.ic_launcher))
+                .into(viewHolder.img);
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

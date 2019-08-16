@@ -18,10 +18,20 @@ import android.util.Log;
 
 import com.zeeb.moviecataloguelocalstorage.R;
 import com.zeeb.moviecataloguelocalstorage.activity.DetailMovieActivity;
+import com.zeeb.moviecataloguelocalstorage.data.remote.model.movie.ResponseMovie;
 import com.zeeb.moviecataloguelocalstorage.data.remote.model.movie.ResultsItemMovie;
+import com.zeeb.moviecataloguelocalstorage.network.ApiConfig;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ReleaseTodayReminder extends BroadcastReceiver {
 
@@ -30,12 +40,38 @@ public class ReleaseTodayReminder extends BroadcastReceiver {
     private static int notifId = 1000;
 
     @Override
-    public void onReceive(Context context, Intent intent) {
-        
-        int notifId = intent.getIntExtra("id", 0);
-        String title = intent.getStringExtra("title");
+    public void onReceive(final Context context, Intent intent) {
 
-        showAlarmNotification(context, title, notifId);
+        final int notifId = intent.getIntExtra("id", 0);
+        final String title = intent.getStringExtra("title");
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Date date = new Date();
+        final String now = dateFormat.format(date);
+
+        getNotif(context, title, notifId,now);
+    }
+
+    public void getNotif(final Context context, final String title, final int notifid, final String tgl) {
+
+        ApiConfig.getInitRetrofit().getReleaseToday(tgl, tgl).enqueue(new Callback<ResponseMovie>() {
+            @Override
+            public void onResponse(Call<ResponseMovie> call, Response<ResponseMovie> response) {
+                ResponseMovie responseMovie = response.body();
+                List<ResultsItemMovie> movies = responseMovie.getResults();
+                for (ResultsItemMovie movie: movies){
+                    if(movie.getReleaseDate().equals(tgl)){
+                        showAlarmNotification(context ,title, notifid);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseMovie> call, Throwable t) {
+
+            }
+        });
+
     }
 
     private void showAlarmNotification(Context context, String title, int notifId) {

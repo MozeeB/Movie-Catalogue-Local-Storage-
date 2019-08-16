@@ -1,6 +1,7 @@
 package com.zeeb.moviecataloguelocalstorage.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.CompoundButton;
@@ -8,10 +9,9 @@ import android.widget.Switch;
 
 import com.orhanobut.hawk.Hawk;
 import com.zeeb.moviecataloguelocalstorage.R;
-import com.zeeb.moviecataloguelocalstorage.data.remote.model.movie.ResponseMovie;
 import com.zeeb.moviecataloguelocalstorage.data.remote.model.movie.ResultsItemMovie;
-import com.zeeb.moviecataloguelocalstorage.network.ApiConfig;
 import com.zeeb.moviecataloguelocalstorage.reminder.DailyReminder;
+import com.zeeb.moviecataloguelocalstorage.reminder.ReleaseMovie;
 import com.zeeb.moviecataloguelocalstorage.reminder.ReleaseTodayReminder;
 
 import java.text.SimpleDateFormat;
@@ -22,10 +22,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import es.dmoral.toasty.Toasty;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+
 
 public class ReminderActivity extends AppCompatActivity {
 
@@ -36,6 +33,9 @@ public class ReminderActivity extends AppCompatActivity {
 
     private DailyReminder dailyReminder;
     private ReleaseTodayReminder releaseTodayReminder;
+
+    private ReleaseMovie releaseMovie;
+
 
     List<ResultsItemMovie> resultsItemMovies = new ArrayList<>();
     String formattedDate;
@@ -67,35 +67,13 @@ public class ReminderActivity extends AppCompatActivity {
 
         dailyReminder = new DailyReminder();
         releaseTodayReminder = new ReleaseTodayReminder();
+        releaseMovie = new ReleaseMovie();
 
-        getReleaseToday();
-
-        setDailyReminder();
+        setDailyReminder(this);
 
         setSwtDaily();
 
 
-
-    }
-
-    public void getReleaseToday(){
-        ApiConfig.getInitRetrofit().getReleaseToday(formattedDate, formattedDate).enqueue(new Callback<ResponseMovie>() {
-            @Override
-            public void onResponse(Call<ResponseMovie> call, Response<ResponseMovie> response) {
-                if (response.isSuccessful()){
-                    ResponseMovie responseMovie = response.body();
-                    resultsItemMovies = responseMovie.getResults();
-                }else {
-                    Toasty.error(ReminderActivity.this, "No data", Toasty.LENGTH_LONG).show();
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<ResponseMovie> call, Throwable t) {
-                Toasty.error(ReminderActivity.this, "No data", Toasty.LENGTH_LONG).show();
-            }
-        });
     }
 
     public void setSwtDaily(){
@@ -115,15 +93,15 @@ public class ReminderActivity extends AppCompatActivity {
         });
     }
 
-    public void setDailyReminder(){
+    public void setDailyReminder(final Context context){
         swtrelease.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (buttonView.isChecked()){
-                    releaseTodayReminder.setRepeatingAlarm(ReminderActivity.this, resultsItemMovies);
+                    releaseMovie.setRepeatingAlrm(context);
                     Hawk.put("release", "");
                 }else {
-                    releaseTodayReminder.cancelAlarm(ReminderActivity.this);
+                    releaseMovie.cancelAlarm(context);
                     Hawk.delete("release");
 
                 }

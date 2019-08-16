@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.zeeb.moviecataloguelocalstorage.BuildConfig;
 import com.zeeb.moviecataloguelocalstorage.R;
 import com.zeeb.moviecataloguelocalstorage.activity.DetailTvShowActivity;
@@ -43,7 +44,9 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.ViewHolder
 
         viewHolder.judul.setText(resultsItemTvShowList.get(i).getName());
         viewHolder.score.setText(String.valueOf(resultsItemTvShowList.get(i).getVoteAverage()));
-        Glide.with(context).load(BuildConfig.URLIMAGE + resultsItemTvShowList.get(i).getPosterPath()).into(viewHolder.img);
+        Glide.with(context).load(BuildConfig.URLIMAGE + resultsItemTvShowList.get(i).getPosterPath())
+                .apply(new RequestOptions().override(350, 550).placeholder(R.mipmap.ic_launcher))
+                .into(viewHolder.img);
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

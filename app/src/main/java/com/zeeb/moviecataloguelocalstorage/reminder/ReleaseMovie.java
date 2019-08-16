@@ -17,28 +17,60 @@ import android.util.Log;
 
 import com.zeeb.moviecataloguelocalstorage.R;
 import com.zeeb.moviecataloguelocalstorage.activity.MainActivity;
+import com.zeeb.moviecataloguelocalstorage.data.remote.model.movie.ResponseMovie;
+import com.zeeb.moviecataloguelocalstorage.data.remote.model.movie.ResultsItemMovie;
+import com.zeeb.moviecataloguelocalstorage.network.ApiConfig;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
-public class DailyReminder extends BroadcastReceiver {
+import es.dmoral.toasty.Toasty;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class ReleaseMovie extends BroadcastReceiver {
 
     private static final int NOTIFICATION_ID = 101;
 
     public static final String NOTIFICATION_CHANNEL_ID = "10001";
 
 
+
     @Override
-    public void onReceive(Context context, Intent intent) {
-        String appName = context.getString(R.string.app_name);
-        String message = context.getString(R.string.msg_daily_reminder);
+    public void onReceive(final Context context, Intent intent) {
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Date date = new Date();
+        final String now = dateFormat.format(date);
 
 
-        showAlarmNotif(context, appName, message, NOTIFICATION_ID);
+        ApiConfig.getInitRetrofit().getReleaseToday(now, now).enqueue(new Callback<ResponseMovie>() {
+            @Override
+            public void onResponse(Call<ResponseMovie> call, Response<ResponseMovie> response) {
+                ResponseMovie responseMovie = response.body();
+                List<ResultsItemMovie> movies = responseMovie.getResults();
+                for (ResultsItemMovie movie : movies) {
+                    if (movie.getReleaseDate().equals(now)) {
+                        showAlarmNotif(context, movie.getTitle(), String.valueOf(R.string.upcoming_reminder_msg), NOTIFICATION_ID);
+                        Toasty.info(context, movie.getReleaseDate(), Toasty.LENGTH_LONG).show();
 
+                    } else {
+                        Toasty.info(context, "Tidak ada film hari ini", Toasty.LENGTH_LONG).show();
+                    }
+                }
+            }
 
-    }
+            @Override
+            public void onFailure(Call<ResponseMovie> call, Throwable t) {
+                Toasty.info(context, "Gagal", Toasty.LENGTH_LONG).show();
 
-    public DailyReminder(){
+            }
+        });
+
 
     }
 
@@ -80,8 +112,8 @@ public class DailyReminder extends BroadcastReceiver {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 7);
-        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.HOUR_OF_DAY, 17);
+        calendar.set(Calendar.MINUTE, 28);
         calendar.set(Calendar.SECOND, 0);
 
         int SDK_INT = Build.VERSION.SDK_INT;
@@ -108,7 +140,7 @@ public class DailyReminder extends BroadcastReceiver {
     }
 
     private static PendingIntent getPendingIntent(Context context) {
-        Intent alarmIntent = new Intent(context, DailyReminder.class);
+        Intent alarmIntent = new Intent(context, ReleaseMovie.class);
 
         boolean isAlarmOn = (PendingIntent.getBroadcast(context, NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_NO_CREATE) != null);
 
