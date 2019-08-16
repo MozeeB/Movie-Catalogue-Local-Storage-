@@ -51,14 +51,12 @@ public class ReleaseTodayReminder extends BroadcastReceiver {
         ApiConfig.getInitRetrofit().getReleaseToday(dateToday, dateToday).enqueue(new Callback<ResponseMovie>() {
             @Override
             public void onResponse(Call<ResponseMovie> call, Response<ResponseMovie> response) {
-                Log.d("Bisa", response.toString());
                 if (response.body() != null){
-                    //showAlarmNotification(context, "Hey !!!", "There Is Something New", 8);
                     releaseResultsList.add(response.body().getResults().get(0));
                     for (ResultsItemMovie r : releaseResultsList){
                         String date = r.getReleaseDate();
                         if(date.equals(dateToday)){
-                            showAlarmNotification(context, "Release Today", r.getTitle(), 8);
+                            showAlarmNotification(context, context.getString(R.string.upcoming_reminder_msg), r.getTitle(), 8);
                         }
                     }
                 }
@@ -120,15 +118,14 @@ public class ReleaseTodayReminder extends BroadcastReceiver {
         Intent intent = new Intent(context, ReleaseTodayReminder.class);
 
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 20);
-        calendar.set(Calendar.MINUTE, 17);
+        calendar.set(Calendar.HOUR_OF_DAY, 8);
+        calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, REQUEST_CODE_RELEASE, intent, 0);
         if (alarmManager != null) {
             alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
         }
-        Toast.makeText(context, "Alhamdulillah", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -141,7 +138,4 @@ public class ReleaseTodayReminder extends BroadcastReceiver {
         }
     }
 
-    private void showToast(Context context, String title, String message){
-        Toast.makeText(context, title, Toast.LENGTH_LONG).show();
-    }
 }
