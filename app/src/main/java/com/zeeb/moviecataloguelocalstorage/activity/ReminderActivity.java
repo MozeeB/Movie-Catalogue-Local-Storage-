@@ -11,7 +11,6 @@ import com.orhanobut.hawk.Hawk;
 import com.zeeb.moviecataloguelocalstorage.R;
 import com.zeeb.moviecataloguelocalstorage.data.remote.model.movie.ResultsItemMovie;
 import com.zeeb.moviecataloguelocalstorage.reminder.DailyReminder;
-import com.zeeb.moviecataloguelocalstorage.reminder.ReleaseMovie;
 import com.zeeb.moviecataloguelocalstorage.reminder.ReleaseTodayReminder;
 
 import java.text.SimpleDateFormat;
@@ -34,7 +33,6 @@ public class ReminderActivity extends AppCompatActivity {
     private DailyReminder dailyReminder;
     private ReleaseTodayReminder releaseTodayReminder;
 
-    private ReleaseMovie releaseMovie;
 
 
     List<ResultsItemMovie> resultsItemMovies = new ArrayList<>();
@@ -67,7 +65,6 @@ public class ReminderActivity extends AppCompatActivity {
 
         dailyReminder = new DailyReminder();
         releaseTodayReminder = new ReleaseTodayReminder();
-        releaseMovie = new ReleaseMovie();
 
         setDailyReminder(this);
 
@@ -98,10 +95,10 @@ public class ReminderActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (buttonView.isChecked()){
-                    releaseMovie.setRepeatingAlrm(context);
+                    releaseTodayReminder.setRepeatingAlarm(context);
                     Hawk.put("release", "");
                 }else {
-                    releaseMovie.cancelAlarm(context);
+                    releaseTodayReminder.stopReminder(context);
                     Hawk.delete("release");
 
                 }

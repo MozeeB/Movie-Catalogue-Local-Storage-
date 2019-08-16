@@ -18,10 +18,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <receiver
-            android:name=".reminder.ReleaseMovie"
-            android:enabled="true"
-            android:exported="false"></receiver>
 
         <activity
             android:name=".activity.SearchTvShowActivity"
